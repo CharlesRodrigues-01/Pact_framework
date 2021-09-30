@@ -64,8 +64,14 @@ class PactVerificationTest {
         }
     }
 
-    @State(value = "I perform a POST request to create a user", action = StateChangeAction.SETUP)
+    @State(value = "perform a POST request to create a user", action = StateChangeAction.SETUP)
     void createUser() {
         userRepository.deleteAll();
+    }
+
+    @State(value = "user with existent email", action = StateChangeAction.SETUP)
+    void userWithExistentEmail() {
+        userRepository.deleteAll();
+        userRepository.save(new User("Charles", "teste2@hotmail.com"));
     }
 }

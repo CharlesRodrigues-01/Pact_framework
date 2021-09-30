@@ -84,7 +84,7 @@ class ServiceClientPactTest {
                 .stringType("message", "Cadastro realizado com sucesso!");
 
         return builder
-                .given("I perform a POST request to create a user")
+                .given("perform a POST request to create a user")
                 .uponReceiving("create a user")
                 .path("/users")
                 .method(HttpMethod.POST.name())
@@ -109,6 +109,36 @@ class ServiceClientPactTest {
                         "}", ContentType.APPLICATION_JSON)
                 .execute().returnResponse();
         assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(201)));
+    }
+
+    @Pact(consumer = consumerName)
+    public RequestResponsePact userWithEmailExistent(PactDslWithProvider builder) {
+
+        return builder
+                .given("user with existent email")
+                .uponReceiving("post user with existent email")
+                .path("/users")
+                .method(HttpMethod.POST.name())
+                .body("{\n" +
+                        "    \"name\":\"Teste2\",\n" +
+                        "    \"email\":\"teste2@hotmail.com\"\n" +
+                        "}")
+                .willRespondWith()
+                .status(400)
+                .toPact();
+    }
+
+    @Test
+    @DisplayName("Should not post a user by existent email")
+    @PactTestFor(pactMethod = "userWithEmailExistent")
+    void testPostWithExistentEmail(MockServer mockServer) throws IOException {
+        HttpResponse httpResponse = Request.Post(mockServer.getUrl() + "/users")
+                .bodyString("{\n" +
+                        "    \"name\":\"Teste2\",\n" +
+                        "    \"email\":\"teste2@hotmail.com\"\n" +
+                        "}", ContentType.APPLICATION_JSON)
+                .execute().returnResponse();
+        assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(400)));
     }
 
 }

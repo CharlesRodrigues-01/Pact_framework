@@ -9,10 +9,10 @@ public class User {
     @NotNull
     private Long id;
     @NotBlank
-    private String name;
+    private final String name;
     @NotBlank
     @Email
-    private String email;
+    private final String email;
 
     public User(Long id, String name, String email) {
         this.id = id;

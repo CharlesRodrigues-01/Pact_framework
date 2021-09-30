@@ -1,0 +1,6 @@
+pactbroker:
+  host: localhost
+  port: "9292"
+  auth:
+    username: pact_implementation
+    password: pact_implementation

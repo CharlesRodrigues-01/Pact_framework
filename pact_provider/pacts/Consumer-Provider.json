@@ -59,7 +59,7 @@
       },
       "providerStates": [
         {
-          "name": "I perform a POST request to create a user"
+          "name": "perform a POST request to create a user"
         }
       ]
     },
@@ -143,6 +143,25 @@
           "params": {
             "id": 10
           }
+        }
+      ]
+    },
+    {
+      "description": "post user with existent email",
+      "request": {
+        "method": "POST",
+        "path": "/users",
+        "body": {
+          "name": "Teste2",
+          "email": "teste2@hotmail.com"
+        }
+      },
+      "response": {
+        "status": 400
+      },
+      "providerStates": [
+        {
+          "name": "user with existent email"
         }
       ]
     }
