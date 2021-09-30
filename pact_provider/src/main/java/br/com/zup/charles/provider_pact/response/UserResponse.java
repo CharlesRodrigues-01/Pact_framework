@@ -1,6 +1,6 @@
-package br.com.zup.charles.providerPact.response;
+package br.com.zup.charles.provider_pact.response;
 
-import br.com.zup.charles.providerPact.model.User;
+import br.com.zup.charles.provider_pact.model.User;
 
 public class UserResponse {
 

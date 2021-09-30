@@ -1,4 +1,4 @@
-package br.com.zup.charles.providerPact.model;
+package br.com.zup.charles.provider_pact.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;

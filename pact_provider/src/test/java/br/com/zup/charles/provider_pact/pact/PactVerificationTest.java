@@ -1,4 +1,4 @@
-package br.com.zup.charles.providerPact.pact;
+package br.com.zup.charles.provider_pact.pact;
 
 import au.com.dius.pact.provider.junit5.HttpTestTarget;
 import au.com.dius.pact.provider.junit5.PactVerificationContext;
@@ -8,8 +8,8 @@ import au.com.dius.pact.provider.junitsupport.State;
 import au.com.dius.pact.provider.junitsupport.StateChangeAction;
 import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
 import au.com.dius.pact.provider.spring.junit5.PactVerificationSpringProvider;
-import br.com.zup.charles.providerPact.model.User;
-import br.com.zup.charles.providerPact.repository.UserRepository;
+import br.com.zup.charles.provider_pact.model.User;
+import br.com.zup.charles.provider_pact.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.TestTemplate;

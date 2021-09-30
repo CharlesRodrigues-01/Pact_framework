@@ -1,6 +1,6 @@
-package br.com.zup.charles.providerPact.request;
+package br.com.zup.charles.provider_pact.request;
 
-import br.com.zup.charles.providerPact.model.User;
+import br.com.zup.charles.provider_pact.model.User;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

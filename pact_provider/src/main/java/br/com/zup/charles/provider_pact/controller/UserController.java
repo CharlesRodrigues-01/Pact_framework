@@ -1,10 +1,10 @@
-package br.com.zup.charles.providerPact.controller;
+package br.com.zup.charles.provider_pact.controller;
 
-import br.com.zup.charles.providerPact.model.User;
-import br.com.zup.charles.providerPact.repository.UserRepository;
-import br.com.zup.charles.providerPact.request.UserRequestDto;
-import br.com.zup.charles.providerPact.response.CreateResponse;
-import br.com.zup.charles.providerPact.response.UserResponse;
+import br.com.zup.charles.provider_pact.model.User;
+import br.com.zup.charles.provider_pact.repository.UserRepository;
+import br.com.zup.charles.provider_pact.request.UserRequestDto;
+import br.com.zup.charles.provider_pact.response.CreateResponse;
+import br.com.zup.charles.provider_pact.response.UserResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
