@@ -1,0 +1,158 @@
+{
+  "provider": {
+    "name": "Provider"
+  },
+  "consumer": {
+    "name": "Consumer"
+  },
+  "interactions": [
+    {
+      "description": "create a user",
+      "request": {
+        "method": "POST",
+        "path": "/users",
+        "body": {
+          "name": "Teste2",
+          "email": "teste2@hotmail.com"
+        }
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json; charset=UTF-8"
+        },
+        "body": {
+          "id": 1,
+          "message": "Cadastro realizado com sucesso!"
+        },
+        "matchingRules": {
+          "body": {
+            "$.id": {
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.message": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json(;\\s?charset=[\\w\\-]+)?"
+                }
+              ],
+              "combine": "AND"
+            }
+          }
+        }
+      },
+      "providerStates": [
+        {
+          "name": "I perform a POST request to create a user"
+        }
+      ]
+    },
+    {
+      "description": "get user with ID 1",
+      "request": {
+        "method": "GET",
+        "path": "/users/1"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=UTF-8"
+        },
+        "body": {
+          "name": "Teste",
+          "id": 1,
+          "email": "teste@hotmail.com"
+        },
+        "matchingRules": {
+          "body": {
+            "$.id": {
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.name": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.email": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json(;\\s?charset=[\\w\\-]+)?"
+                }
+              ],
+              "combine": "AND"
+            }
+          }
+        }
+      },
+      "providerStates": [
+        {
+          "name": "user with ID 1 exists",
+          "params": {
+            "id": 1
+          }
+        }
+      ]
+    },
+    {
+      "description": "get user with ID 10",
+      "request": {
+        "method": "GET",
+        "path": "/users/10"
+      },
+      "response": {
+        "status": 404
+      },
+      "providerStates": [
+        {
+          "name": "user with ID 10 does not exist",
+          "params": {
+            "id": 10
+          }
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "3.0.0"
+    },
+    "pact-jvm": {
+      "version": "4.1.7"
+    }
+  }
+}
