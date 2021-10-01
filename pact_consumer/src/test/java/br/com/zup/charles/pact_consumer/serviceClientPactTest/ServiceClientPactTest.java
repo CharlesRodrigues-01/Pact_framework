@@ -28,6 +28,10 @@ import static org.hamcrest.Matchers.is;
 class ServiceClientPactTest {
 
     private final String consumerName = "Consumer";
+    private final String responseBody = "{\n" +
+            "\"name\":\"Teste2\",\n" +
+            "\"email\":\"teste2@hotmail.com\"\n" +
+            "}";
 
     @Pact(consumer = consumerName)
     public RequestResponsePact getSingleUser(PactDslWithProvider builder) {
@@ -88,10 +92,7 @@ class ServiceClientPactTest {
                 .uponReceiving("create a user")
                 .path("/users")
                 .method(HttpMethod.POST.name())
-                .body("{\n" +
-                        "    \"name\":\"Teste2\",\n" +
-                        "    \"email\":\"teste2@hotmail.com\"\n" +
-                        "}")
+                .body(responseBody)
                 .willRespondWith()
                 .status(201)
                 .body(bodyResponse)
@@ -103,10 +104,7 @@ class ServiceClientPactTest {
     @PactTestFor(pactMethod = "postSingleUser")
     void testPostSingleUser(MockServer mockServer) throws IOException {
         HttpResponse httpResponse = Request.Post(mockServer.getUrl() + "/users")
-                .bodyString("{\n" +
-                        "    \"name\":\"Teste2\",\n" +
-                        "    \"email\":\"teste2@hotmail.com\"\n" +
-                        "}", ContentType.APPLICATION_JSON)
+                .bodyString(responseBody, ContentType.APPLICATION_JSON)
                 .execute().returnResponse();
         assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(201)));
     }
@@ -119,10 +117,7 @@ class ServiceClientPactTest {
                 .uponReceiving("post user with existent email")
                 .path("/users")
                 .method(HttpMethod.POST.name())
-                .body("{\n" +
-                        "    \"name\":\"Teste2\",\n" +
-                        "    \"email\":\"teste2@hotmail.com\"\n" +
-                        "}")
+                .body(responseBody)
                 .willRespondWith()
                 .status(400)
                 .toPact();
@@ -133,12 +128,8 @@ class ServiceClientPactTest {
     @PactTestFor(pactMethod = "userWithEmailExistent")
     void testPostWithExistentEmail(MockServer mockServer) throws IOException {
         HttpResponse httpResponse = Request.Post(mockServer.getUrl() + "/users")
-                .bodyString("{\n" +
-                        "    \"name\":\"Teste2\",\n" +
-                        "    \"email\":\"teste2@hotmail.com\"\n" +
-                        "}", ContentType.APPLICATION_JSON)
+                .bodyString(responseBody, ContentType.APPLICATION_JSON)
                 .execute().returnResponse();
         assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(400)));
     }
-
 }

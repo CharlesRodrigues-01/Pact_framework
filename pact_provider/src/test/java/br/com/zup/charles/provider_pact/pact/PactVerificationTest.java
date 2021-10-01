@@ -50,7 +50,7 @@ class PactVerificationTest {
     void userExists(Map<String, Object> params) {
         Long userId = ((Number) params.get("id")).longValue();
         Optional<User> user = userRepository.findById(userId);
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             userRepository.save(new User("Charles", "charles@gmail.com"));
         }
     }

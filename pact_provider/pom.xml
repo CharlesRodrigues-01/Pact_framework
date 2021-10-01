@@ -69,8 +69,8 @@
 				<version>${pact.provider-maven}</version>
 				<configuration>
 					<pactBrokerUrl>http://localhost:9292</pactBrokerUrl>
-					<pactBrokerUsername>pact_workshop</pactBrokerUsername>
-					<pactBrokerPassword>pact_workshop</pactBrokerPassword>
+					<pactBrokerUsername>pact_implementation</pactBrokerUsername>
+					<pactBrokerPassword>pact_implementation</pactBrokerPassword>
 					<tags>
 						<tag>prod</tag>
 						<tag>test</tag>
