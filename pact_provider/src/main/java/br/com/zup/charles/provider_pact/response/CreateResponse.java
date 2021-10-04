@@ -21,6 +21,6 @@ public class CreateResponse {
     }
 
     public void setMessage(){
-        this.message = "Cadastro realizado com sucesso!";
+        this.message = "Successfully registered user!";
     }
 }

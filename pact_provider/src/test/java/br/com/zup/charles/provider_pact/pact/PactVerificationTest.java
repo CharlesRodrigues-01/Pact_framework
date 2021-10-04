@@ -64,7 +64,7 @@ class PactVerificationTest {
         }
     }
 
-    @State(value = "perform a POST request to create a user", action = StateChangeAction.SETUP)
+    @State(value = "user does not exists", action = StateChangeAction.SETUP)
     void createUser() {
         userRepository.deleteAll();
     }

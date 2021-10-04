@@ -7,10 +7,13 @@
   },
   "interactions": [
     {
-      "description": "create a user",
+      "description": "a POST request to create a user",
       "request": {
         "method": "POST",
         "path": "/users",
+        "headers": {
+          "Content-Type": "application/json; charset=UTF-8"
+        },
         "body": {
           "name": "Teste2",
           "email": "teste2@hotmail.com"
@@ -19,13 +22,25 @@
       "response": {
         "status": 201,
         "headers": {
-          "Content-Type": "application/json; charset=UTF-8"
+          "Content-Type": "application/json",
+          "Location": "http://localhost:8080/users/1"
         },
         "body": {
           "id": 1,
-          "message": "Cadastro realizado com sucesso!"
+          "message": "Successfully registered user!"
         },
         "matchingRules": {
+          "header": {
+            "Location": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "http://localhost:[0-9]+/users/1"
+                }
+              ],
+              "combine": "AND"
+            }
+          },
           "body": {
             "$.id": {
               "matchers": [
@@ -43,23 +58,12 @@
               ],
               "combine": "AND"
             }
-          },
-          "header": {
-            "Content-Type": {
-              "matchers": [
-                {
-                  "match": "regex",
-                  "regex": "application/json(;\\s?charset=[\\w\\-]+)?"
-                }
-              ],
-              "combine": "AND"
-            }
           }
         }
       },
       "providerStates": [
         {
-          "name": "perform a POST request to create a user"
+          "name": "user does not exists"
         }
       ]
     },
@@ -72,7 +76,7 @@
       "response": {
         "status": 200,
         "headers": {
-          "Content-Type": "application/json; charset=UTF-8"
+          "Content-Type": "application/json"
         },
         "body": {
           "name": "Teste",
@@ -101,17 +105,6 @@
               "matchers": [
                 {
                   "match": "type"
-                }
-              ],
-              "combine": "AND"
-            }
-          },
-          "header": {
-            "Content-Type": {
-              "matchers": [
-                {
-                  "match": "regex",
-                  "regex": "application/json(;\\s?charset=[\\w\\-]+)?"
                 }
               ],
               "combine": "AND"
@@ -147,10 +140,13 @@
       ]
     },
     {
-      "description": "post user with existent email",
+      "description": "post user with same email",
       "request": {
         "method": "POST",
         "path": "/users",
+        "headers": {
+          "Content-Type": "application/json; charset=UTF-8"
+        },
         "body": {
           "name": "Teste2",
           "email": "teste2@hotmail.com"

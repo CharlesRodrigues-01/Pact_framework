@@ -7,6 +7,7 @@ import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.ContentType;
@@ -14,9 +15,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -28,6 +33,11 @@ import static org.hamcrest.Matchers.is;
 class ServiceClientPactTest {
 
     private final String consumerName = "Consumer";
+    private final Map<String, String> headersContentType = MapUtils.putAll(new HashMap<>(), new String[] {
+            HttpHeaders.CONTENT_TYPE,
+            MediaType.APPLICATION_JSON_VALUE
+    });
+
     private final String responseBody = "{\n" +
             "\"name\":\"Teste2\",\n" +
             "\"email\":\"teste2@hotmail.com\"\n" +
@@ -48,6 +58,7 @@ class ServiceClientPactTest {
                 .method(HttpMethod.GET.name())
                 .willRespondWith()
                 .status(200)
+                .headers(headersContentType)
                 .body(bodyResponse)
                 .toPact();
     }
@@ -85,15 +96,17 @@ class ServiceClientPactTest {
 
         PactDslJsonBody bodyResponse = new PactDslJsonBody()
                 .integerType("id", 1L)
-                .stringType("message", "Cadastro realizado com sucesso!");
+                .stringType("message", "Successfully registered user!");
 
         return builder
-                .given("perform a POST request to create a user")
-                .uponReceiving("create a user")
+                .given("user does not exists")
+                .uponReceiving("a POST request to create a user")
                 .path("/users")
                 .method(HttpMethod.POST.name())
-                .body(responseBody)
+                .body(responseBody, ContentType.APPLICATION_JSON)
                 .willRespondWith()
+                .headers(headersContentType)
+                .matchHeader("Location", "http://localhost:[0-9]+/users/1", "http://localhost:8080/users/1" )
                 .status(201)
                 .body(bodyResponse)
                 .toPact();
@@ -114,10 +127,10 @@ class ServiceClientPactTest {
 
         return builder
                 .given("user with existent email")
-                .uponReceiving("post user with existent email")
+                .uponReceiving("post user with same email")
                 .path("/users")
                 .method(HttpMethod.POST.name())
-                .body(responseBody)
+                .body(responseBody, ContentType.APPLICATION_JSON)
                 .willRespondWith()
                 .status(400)
                 .toPact();
