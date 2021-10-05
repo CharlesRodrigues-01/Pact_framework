@@ -35,7 +35,7 @@
               "matchers": [
                 {
                   "match": "regex",
-                  "regex": "http://localhost:[0-9]+/users/1"
+                  "regex": ".*/users/[0-9]+"
                 }
               ],
               "combine": "AND"
@@ -158,6 +158,79 @@
       "providerStates": [
         {
           "name": "user with existent email"
+        }
+      ]
+    },
+    {
+      "description": "get all users",
+      "request": {
+        "method": "GET",
+        "path": "/users"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=UTF-8"
+        },
+        "body": [
+          {
+            "name": "Teste",
+            "id": 1,
+            "email": "teste@hotmail.com"
+          }
+        ],
+        "matchingRules": {
+          "body": {
+            "$": {
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 0
+                }
+              ],
+              "combine": "AND"
+            },
+            "$[*].id": {
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$[*].name": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$[*].email": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json(;\\s?charset=[\\w\\-]+)?"
+                }
+              ],
+              "combine": "AND"
+            }
+          }
+        }
+      },
+      "providerStates": [
+        {
+          "name": "users exists"
         }
       ]
     }

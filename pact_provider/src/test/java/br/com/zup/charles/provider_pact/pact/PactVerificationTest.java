@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 
@@ -53,6 +54,17 @@ class PactVerificationTest {
         if (user.isEmpty()) {
             userRepository.save(new User("Charles", "charles@gmail.com"));
         }
+    }
+
+    @State(value = "users exists", action = StateChangeAction.SETUP)
+    void usersExists() {
+        userRepository.deleteAll();
+        userRepository.saveAll(Arrays.asList(
+                new User("Teste", "teste@hotmail.com"),
+                new User("Fulano", "fulano@hotmail.com"),
+                new User("Sicrano", "sicrano@hotmail.com"),
+                new User("Beltrano", "beltrano@hotmail.com")
+        ));
     }
 
     @State(value = "user with ID 10 does not exist", action = StateChangeAction.SETUP)

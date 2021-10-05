@@ -2,6 +2,9 @@ package br.com.zup.charles.provider_pact.response;
 
 import br.com.zup.charles.provider_pact.model.User;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class UserResponse {
 
     private final Long id;
@@ -24,5 +27,9 @@ public class UserResponse {
 
     public String getEmail() {
         return email;
+    }
+
+    public static List<UserResponse> convert(List<User> users) {
+        return users.stream().map(UserResponse::new).collect(Collectors.toList());
     }
 }

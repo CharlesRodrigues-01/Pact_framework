@@ -10,9 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @FeignClient(name = "status", url = "${user.api}")
 public interface UserClient {
+
+    @GetMapping(value = "/users", consumes = "application/json", produces = "application/json")
+    List<User> getAllUsers();
+
     @GetMapping(value = "/users/{id}", consumes = "application/json", produces = "application/json")
     User getUserById(@PathVariable("id") Long id);
 

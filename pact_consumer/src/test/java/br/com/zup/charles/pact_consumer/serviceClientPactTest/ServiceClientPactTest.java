@@ -1,6 +1,8 @@
 package br.com.zup.charles.pact_consumer.serviceClientPactTest;
 
 import au.com.dius.pact.consumer.MockServer;
+import au.com.dius.pact.consumer.dsl.DslPart;
+import au.com.dius.pact.consumer.dsl.PactDslJsonArray;
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
@@ -11,6 +13,7 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.ContentType;
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,8 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 @SpringBootTest
 @ExtendWith(PactConsumerTestExt.class)
@@ -106,7 +108,7 @@ class ServiceClientPactTest {
                 .body(responseBody, ContentType.APPLICATION_JSON)
                 .willRespondWith()
                 .headers(headersContentType)
-                .matchHeader("Location", "http://localhost:[0-9]+/users/1", "http://localhost:8080/users/1" )
+                .matchHeader("Location", ".*/users/[0-9]+", "http://localhost:8080/users/1" )
                 .status(201)
                 .body(bodyResponse)
                 .toPact();
@@ -144,5 +146,32 @@ class ServiceClientPactTest {
                 .bodyString(responseBody, ContentType.APPLICATION_JSON)
                 .execute().returnResponse();
         assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(400)));
+    }
+
+    @Pact(consumer = consumerName)
+    public RequestResponsePact getAllUsers(PactDslWithProvider builder) {
+
+        DslPart bodyResponse = PactDslJsonArray.arrayEachLike()
+                    .integerType("id", 1L)
+                    .stringType("name", "Teste")
+                    .stringType("email", "teste@hotmail.com")
+                .closeObject();
+
+        return builder
+                .given("users exists")
+                .uponReceiving("get all users")
+                .path("/users")
+                .willRespondWith()
+                .status(200)
+                .body(bodyResponse)
+                .toPact();
+    }
+
+    @Test
+    @DisplayName("Should get all users")
+    @PactTestFor(pactMethod = "getAllUsers")
+    void testGetAllUsers(MockServer mockServer) throws IOException {
+        HttpResponse httpResponse = Request.Get(mockServer.getUrl() + "/users").execute().returnResponse();
+        assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(200)));
     }
 }

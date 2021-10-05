@@ -12,6 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -37,6 +38,12 @@ public class UserController {
         userRepository.save(user);
         URI uri = uriComponentsBuilder.path("/users/{id}").build(user.getId());
         return ResponseEntity.created(uri).body(new CreateResponse(user));
+    }
+
+    @GetMapping
+    public List<UserResponse> getAllUsers(){
+        List<User> users = userRepository.findAll();
+        return UserResponse.convert(users);
     }
 
     @GetMapping("/{id}")
