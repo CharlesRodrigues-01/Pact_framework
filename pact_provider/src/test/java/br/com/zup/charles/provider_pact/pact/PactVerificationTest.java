@@ -6,6 +6,7 @@ import au.com.dius.pact.provider.junitsupport.IgnoreMissingStateChange;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
 import au.com.dius.pact.provider.junitsupport.StateChangeAction;
+import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
 import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
 import au.com.dius.pact.provider.spring.junit5.PactVerificationSpringProvider;
 import br.com.zup.charles.provider_pact.model.User;
@@ -24,9 +25,9 @@ import java.util.Optional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Provider("Provider")
-@PactFolder("pacts")
-@IgnoreMissingStateChange
-//@PactBroker
+//@PactFolder("pacts")
+//@IgnoreMissingStateChange
+@PactBroker
 class PactVerificationTest {
 
     @LocalServerPort

@@ -20,13 +20,13 @@
         }
       },
       "response": {
-        "status": 201,
+        "status": 501,
         "headers": {
           "Content-Type": "application/json",
           "Location": "http://localhost:8080/users/1"
         },
         "body": {
-          "id": 1,
+          "id": "1L",
           "message": "Successfully registered user!"
         },
         "matchingRules": {
@@ -45,7 +45,7 @@
             "$.id": {
               "matchers": [
                 {
-                  "match": "integer"
+                  "match": "type"
                 }
               ],
               "combine": "AND"

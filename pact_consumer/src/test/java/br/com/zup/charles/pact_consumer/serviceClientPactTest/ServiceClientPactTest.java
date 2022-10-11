@@ -9,6 +9,8 @@ import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
+import br.com.zup.charles.pact_consumer.builder.UserRequestBuilder;
+import br.com.zup.charles.pact_consumer.request.UserRequestDto;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
@@ -40,10 +42,13 @@ class ServiceClientPactTest {
             MediaType.APPLICATION_JSON_VALUE
     });
 
-    private final String responseBody = "{\n" +
-            "\"name\":\"Teste2\",\n" +
-            "\"email\":\"teste2@hotmail.com\"\n" +
-            "}";
+    private static String buildRequestBody(){
+        UserRequestDto userRequestDto = new UserRequestBuilder()
+                .name("Teste2")
+                .email("teste2@hotmail.com")
+                .build();
+        return userRequestDto.toString();
+    }
 
     @Pact(consumer = consumerName)
     public RequestResponsePact getSingleUser(PactDslWithProvider builder) {
@@ -68,7 +73,7 @@ class ServiceClientPactTest {
     @Test
     @DisplayName("Should get a user by ID")
     @PactTestFor(pactMethod = "getSingleUser")
-    void testSingleProduct(MockServer mockServer) throws IOException {
+    void testSingleUser(MockServer mockServer) throws IOException {
         HttpResponse httpResponse = Request.Get(mockServer.getUrl() + "/users/1").execute().returnResponse();
         assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(200)));
     }
@@ -105,7 +110,7 @@ class ServiceClientPactTest {
                 .uponReceiving("a POST request to create a user")
                 .path("/users")
                 .method(HttpMethod.POST.name())
-                .body(responseBody, ContentType.APPLICATION_JSON)
+                .body(buildRequestBody(), ContentType.APPLICATION_JSON)
                 .willRespondWith()
                 .headers(headersContentType)
                 .matchHeader("Location", ".*/users/[0-9]+", "http://localhost:8080/users/1" )
@@ -119,7 +124,7 @@ class ServiceClientPactTest {
     @PactTestFor(pactMethod = "postSingleUser")
     void testPostSingleUser(MockServer mockServer) throws IOException {
         HttpResponse httpResponse = Request.Post(mockServer.getUrl() + "/users")
-                .bodyString(responseBody, ContentType.APPLICATION_JSON)
+                .bodyString(buildRequestBody(), ContentType.APPLICATION_JSON)
                 .execute().returnResponse();
         assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(201)));
     }
@@ -132,7 +137,7 @@ class ServiceClientPactTest {
                 .uponReceiving("post user with same email")
                 .path("/users")
                 .method(HttpMethod.POST.name())
-                .body(responseBody, ContentType.APPLICATION_JSON)
+                .body(buildRequestBody(), ContentType.APPLICATION_JSON)
                 .willRespondWith()
                 .status(400)
                 .toPact();
@@ -143,7 +148,7 @@ class ServiceClientPactTest {
     @PactTestFor(pactMethod = "userWithEmailExistent")
     void testPostWithExistentEmail(MockServer mockServer) throws IOException {
         HttpResponse httpResponse = Request.Post(mockServer.getUrl() + "/users")
-                .bodyString(responseBody, ContentType.APPLICATION_JSON)
+                .bodyString(buildRequestBody(), ContentType.APPLICATION_JSON)
                 .execute().returnResponse();
         assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(400)));
     }

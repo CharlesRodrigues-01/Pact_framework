@@ -23,4 +23,9 @@ public class UserRequestDto {
     public String getEmail() {
         return email;
     }
+
+    @Override
+    public String toString() {
+        return "{\n" + "\"name\":\"" + name + "\",\n" + "\"email\":\"" + email +"\"\n" + "}";
+    }
 }
